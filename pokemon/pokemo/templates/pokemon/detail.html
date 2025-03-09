@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ name }}</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f8f8;
+        text-align: center;
+        margin: 20px;
+      }
+
+      .container {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        display: inline-block;
+        text-align: center;
+      }
+
+      h1 {
+        color: #009b4d;
+        text-transform: capitalize;
+      }
+
+      img {
+        width: 200px;
+        height: 200px;
+        border-radius: 10px;
+        border: 3px solid #ffcc00;
+      }
+
+      h2 {
+        color: #333;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      li {
+        background: #ffebeb;
+        padding: 8px;
+        margin: 5px;
+        border-radius: 5px;
+        font-weight: bold;
+      }
+
+      button {
+        background-color: #ffcc00;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        margin-top: 10px;
+      }
+
+      button:hover {
+        background-color: #faf5e9;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>{{ name }}</h1>
+      <img src="{{ image }}" alt="{{ name }}" />
+      <h2>Habilidades</h2>
+      <ul>
+        {% for ability in abilities %}
+        <li>{{ ability }}</li>
+        {% endfor %}
+      </ul>
+      <a href="{% url 'pokemon_list' %}"><button>Volver</button></a>
+    </div>
+  </body>
+</html>
