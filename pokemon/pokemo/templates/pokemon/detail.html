@@ -3,80 +3,129 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ name }}</title>
+    <title>Detalles de {{ pokemon.name }}</title>
     <style>
       body {
         font-family: Arial, sans-serif;
-        background-color: #f8f8f8;
-        text-align: center;
-        margin: 20px;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
       }
 
       .container {
-        background: white;
+        width: 80%;
+        max-width: 800px;
         padding: 20px;
-        border-radius: 10px;
-        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-        display: inline-block;
+        background-color: #ffffff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
         text-align: center;
       }
 
       h1 {
-        color: #009b4d;
-        text-transform: capitalize;
+        color: #333;
+        font-size: 2.5rem;
+        margin-bottom: 20px;
       }
 
       img {
-        width: 200px;
-        height: 200px;
-        border-radius: 10px;
-        border: 3px solid #ffcc00;
+        width: 300px;
+        height: auto;
+        border-radius: 8px;
+        margin-bottom: 20px;
       }
 
       h2 {
         color: #333;
+        font-size: 1.8rem;
+        margin-bottom: 10px;
       }
 
       ul {
-        list-style: none;
+        list-style-type: none;
         padding: 0;
       }
 
       li {
-        background: #ffebeb;
-        padding: 8px;
-        margin: 5px;
+        background-color: #f1f1f1;
+        padding: 10px;
+        margin: 5px 0;
         border-radius: 5px;
-        font-weight: bold;
       }
 
-      button {
-        background-color: #ffcc00;
-        color: white;
-        border: none;
-        padding: 10px 15px;
+      a {
+        text-decoration: none;
+        color: #fff;
+        font-size: 1.2rem;
+        margin: 10px;
+        display: inline-block;
+        padding: 10px 20px;
         border-radius: 5px;
-        cursor: pointer;
-        font-size: 14px;
-        margin-top: 10px;
+        transition: background-color 0.3s ease, transform 0.3s ease;
       }
 
-      button:hover {
-        background-color: #faf5e9;
+      a:hover {
+        transform: scale(1.05);
+      }
+
+      .edit-button {
+        background-color: #007bff;
+      }
+
+      .edit-button:hover {
+        background-color: #0056b3;
+      }
+
+      .delete-button {
+        background-color: #dc3545;
+      }
+
+      .delete-button:hover {
+        background-color: #c82333;
+      }
+
+      .back-button {
+        background-color: #28a745;
+      }
+
+      .back-button:hover {
+        background-color: #218838;
+      }
+
+      .button-group {
+        margin-top: 20px;
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <h1>{{ name }}</h1>
-      <img src="{{ image }}" alt="{{ name }}" />
-      <h2>Habilidades</h2>
+      <h1>{{ pokemon.name }}</h1>
+      <img src="{{ pokemon.image }}" alt="{{ pokemon.name }}" />
+
+      <h2>Habilidades:</h2>
       <ul>
-        {% for ability in abilities %}
+        {% for ability in pokemon.get_abilities %}
         <li>{{ ability }}</li>
         {% endfor %}
       </ul>
-      <a href="{% url 'pokemon_list' %}"><button>Volver</button></a>
+
+      <div class="button-group">
+        <a href="{% url 'pokemon_edit' pokemon.pk %}" class="edit-button"
+          >Editar</a
+        >
+        <a
+          href="{% url 'pokemon_confirm_delete' pokemon.pk %}"
+          class="delete-button"
+          >Eliminar</a
+        >
+        <a href="{% url 'pokemon_list' %}" class="back-button"
+          >Volver a la lista</a
+        >
+      </div>
     </div>
   </body>
 </html>

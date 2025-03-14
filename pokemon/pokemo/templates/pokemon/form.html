@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      {% if form.instance.pk %}Editar{% else %}Crear{% endif %} Pokémon
+    </title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .container {
+        width: 80%;
+        max-width: 600px;
+        padding: 20px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+      }
+
+      h1 {
+        color: #333;
+        text-align: center;
+        font-size: 2rem;
+        margin-bottom: 20px;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      form input,
+      form button {
+        padding: 5px;
+        font-size: 1rem;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
+
+      form input {
+        width: 80%;
+      }
+
+      form button {
+        background-color: #16b161;
+        color: white;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.3s ease;
+      }
+
+      form button:hover {
+        background-color: #0056b3;
+      }
+
+      .cancel-link {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+        font-size: 1rem;
+        color: #d21919;
+        text-decoration: none;
+      }
+
+      .cancel-link:hover {
+        text-decoration: underline;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>{% if form.instance.pk %}Editar{% else %}Crear{% endif %} Pokémon</h1>
+
+      <form method="post">
+        {% csrf_token %} {{ form.as_p }}
+        <button type="submit">Guardar</button>
+      </form>
+
+      <a href="{% url 'pokemon_list' %}" class="cancel-link">Cancelar</a>
+    </div>
+  </body>
+</html>

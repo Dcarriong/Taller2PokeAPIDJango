@@ -1,34 +1,50 @@
-import requests
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Pokemon
+from .forms import PokemonForm
+
+
+from django.core.paginator import Paginator
 
 def pokemon_list(request):
-    url = "https://pokeapi.co/api/v2/pokemon?limit=202"
-    response = requests.get(url)
-    data = response.json()
-    pokemons = []
-
-    for item in data["results"]:
-        pokemon_data = requests.get(item["url"]).json()
-        pokemons.append({
-            "name": item["name"].capitalize(),
-            "image": pokemon_data["sprites"]["front_default"],
-            "id": pokemon_data["id"]
-        })
-
-    return render(request, "pokemon/list.html", {"pokemons": pokemons})
+    pokemons = Pokemon.objects.all()  
+    paginator = Paginator(pokemons, 10)  
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'pokemon/list.html', {'pokemons': page_obj})
 
 
-def pokemon_detail(request, pokemon_id):
-    url = f"https://pokeapi.co/api/v2/pokemon/{pokemon_id}/"
-    response = requests.get(url)
-    data = response.json()
 
-    abilities = [ability["ability"]["name"].capitalize() for ability in data["abilities"]]
+def pokemon_detail(request, pk):
+    pokemon = get_object_or_404(Pokemon, pk=pk)
+    return render(request, 'pokemon/detail.html', {'pokemon': pokemon})
 
-    context = {
-        "name": data["name"].capitalize(),
-        "image": data["sprites"]["front_default"],
-        "abilities": abilities
-    }
-    
-    return render(request, "pokemon/detail.html", context)
+
+def pokemon_create(request):
+    if request.method == 'POST':
+        form = PokemonForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('pokemon_list')
+    else:
+        form = PokemonForm()
+    return render(request, 'pokemon/form.html', {'form': form})
+
+
+def pokemon_edit(request, pk):
+    pokemon = get_object_or_404(Pokemon, pk=pk)
+    if request.method == 'POST':
+        form = PokemonForm(request.POST, instance=pokemon)
+        if form.is_valid():
+            form.save()
+            return redirect('pokemon_list')
+    else:
+        form = PokemonForm(instance=pokemon)
+    return render(request, 'pokemon/form.html', {'form': form})
+
+
+def pokemon_confirm_delete(request, pk):
+    pokemon = get_object_or_404(Pokemon, pk=pk)
+    if request.method == 'POST':
+        pokemon.delete()
+        return redirect('pokemon_list')
+    return render(request, 'pokemon/confirm_delete.html', {'pokemon': pokemon})
